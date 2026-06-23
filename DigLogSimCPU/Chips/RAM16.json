@@ -22,7 +22,7 @@
         "y":22.94734
       },
       "BitCount":1,
-      "Colour":0,
+      "Colour":3,
       "ValueDisplayMode":0
     },
     {
@@ -33,7 +33,7 @@
         "y":22.43234
       },
       "BitCount":1,
-      "Colour":0,
+      "Colour":1,
       "ValueDisplayMode":0
     },
     {
@@ -103,7 +103,7 @@
         "x":-0.14809,
         "y":20.84151
       },
-      "OutputPinColourInfo":[{"PinColour":0,"PinID":1394764373},{"PinColour":0,"PinID":458699462},{"PinColour":0,"PinID":1166069927},{"PinColour":0,"PinID":235185858}],
+      "OutputPinColourInfo":[{"PinColour":6,"PinID":1394764373},{"PinColour":6,"PinID":458699462},{"PinColour":6,"PinID":1166069927},{"PinColour":6,"PinID":235185858}],
       "InternalData":null
     },
     {
@@ -114,7 +114,7 @@
         "x":-0.12785,
         "y":18.58802
       },
-      "OutputPinColourInfo":[{"PinColour":0,"PinID":1394764373},{"PinColour":0,"PinID":458699462},{"PinColour":0,"PinID":1166069927},{"PinColour":0,"PinID":235185858}],
+      "OutputPinColourInfo":[{"PinColour":5,"PinID":1394764373},{"PinColour":5,"PinID":458699462},{"PinColour":5,"PinID":1166069927},{"PinColour":5,"PinID":235185858}],
       "InternalData":null
     },
     {
@@ -301,7 +301,7 @@
         "x":-3.22104,
         "y":21.63426
       },
-      "OutputPinColourInfo":[{"PinColour":0,"PinID":1996807063}],
+      "OutputPinColourInfo":[{"PinColour":4,"PinID":1996807063}],
       "InternalData":null
     },
     {
@@ -312,7 +312,7 @@
         "x":-1.89103,
         "y":22.2548
       },
-      "OutputPinColourInfo":[{"PinColour":0,"PinID":1996807063}],
+      "OutputPinColourInfo":[{"PinColour":1,"PinID":1996807063}],
       "InternalData":null
     },
     {

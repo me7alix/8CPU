@@ -22,7 +22,7 @@
         "y":25.10227
       },
       "BitCount":1,
-      "Colour":0,
+      "Colour":3,
       "ValueDisplayMode":0
     },
     {
@@ -1822,6 +1822,20 @@
       "ConnectedWireIndex":-1,
       "ConnectedWireSegmentIndex":-1,
       "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
+    },
+    {
+      "SourcePinAddress":{
+        "PinID":0,
+        "PinOwnerID":279836192
+      },
+      "TargetPinAddress":{
+        "PinID":1339996628,
+        "PinOwnerID":1088696938
+      },
+      "ConnectionType":1,
+      "ConnectedWireIndex":54,
+      "ConnectedWireSegmentIndex":3,
+      "Points":[{"x":1.60719,"y":22.39692},{"x":0.0,"y":0.0}]
     }
   ],
   "Displays": null
