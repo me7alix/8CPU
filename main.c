@@ -229,7 +229,7 @@ void draw_state(CPU *cpu) {
 	fprintf(fp, "BREG  = %u\n", cpu->B);
 	fprintf(fp, "PCTR  = %u\n", cpu->PCTR);
 	fprintf(fp, "PRNT  = %u\n", cpu->PR);
-	printf("\033[2J\033[H");
+	printf("\033[H");
 	printf("%s", buf);
 	fclose(fp);
 }
@@ -255,6 +255,7 @@ int main(int argc, char *argv[]) {
 		CPU cpu;
 		memcpy(cpu.PROG, code, sizeof(cpu.PROG));
 		int slp = atoi(argv[3]);
+		printf("\033[2J");
 		while (cpu.PROG[(int)cpu.PCTR*2] != 0) {
 			exec1(&cpu);
 			draw_state(&cpu);
