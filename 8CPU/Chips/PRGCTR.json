@@ -1,10 +1,10 @@
 {
   "DLSVersion": "2.1.6",
-  "Name": "8PC2",
+  "Name": "PRGCTR",
   "NameLocation": 0,
   "ChipType": 0,
   "Size": {
-    "x": 0.725,
+    "x": 1.025,
     "y": 1.0
   },
   "Colour": {
@@ -18,8 +18,8 @@
       "Name":"IN",
       "ID":1708443260,
       "Position":{
-        "x":-9.69937,
-        "y":20.77141
+        "x":-9.70581,
+        "y":20.70698
       },
       "BitCount":8,
       "Colour":0,
@@ -96,12 +96,12 @@
       "InternalData":null
     },
     {
-      "Name":"8CREG",
+      "Name":"8REG",
       "ID":178278295,
       "Label":"",
       "Position":{
-        "x":-3.22933,
-        "y":20.18227
+        "x":-3.2525,
+        "y":20.1875
       },
       "OutputPinColourInfo":[{"PinColour":0,"PinID":1665930128}],
       "InternalData":null
@@ -244,6 +244,20 @@
       "ConnectedWireIndex":4,
       "ConnectedWireSegmentIndex":1,
       "Points":[{"x":-1.79856,"y":19.54053},{"x":0.0,"y":0.0}]
+    },
+    {
+      "SourcePinAddress":{
+        "PinID":0,
+        "PinOwnerID":515467955
+      },
+      "TargetPinAddress":{
+        "PinID":676233193,
+        "PinOwnerID":178278295
+      },
+      "ConnectionType":1,
+      "ConnectedWireIndex":5,
+      "ConnectedWireSegmentIndex":3,
+      "Points":[{"x":-4.30241,"y":19.9403},{"x":0.0,"y":0.0}]
     }
   ],
   "Displays": null

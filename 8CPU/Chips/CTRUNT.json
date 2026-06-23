@@ -1,10 +1,10 @@
 {
   "DLSVersion": "2.1.6",
-  "Name": "OPDEC",
+  "Name": "CTRUNT",
   "NameLocation": 0,
   "ChipType": 0,
   "Size": {
-    "x": 0.875,
+    "x": 1.025,
     "y": 3.5
   },
   "Colour": {
@@ -1445,5 +1445,5 @@
       "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
     }
   ],
-  "Displays": null
+  "Displays":[]
 }

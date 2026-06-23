@@ -1,9 +1,9 @@
 {
-  "ProjectName": "CPU2",
+  "ProjectName": "8CPU",
   "DLSVersion_LastSaved": "2.1.6",
   "DLSVersion_EarliestCompatible": "2.0.0",
   "CreationTime": "2026-04-02T11:06:15.136+03:00",
-  "LastSaveTime": "2026-06-23T12:49:35.605+03:00",
+  "LastSaveTime": "2026-06-23T22:54:56.589+03:00",
   "Prefs_MainPinNamesDisplayMode": 2,
   "Prefs_ChipPinNamesDisplayMode": 1,
   "Prefs_GridDisplayMode": 0,
@@ -11,7 +11,7 @@
   "Prefs_StraightWires": 0,
   "Prefs_SimPaused": false,
   "Prefs_SimTargetStepsPerSecond": 1000,
-  "Prefs_SimStepsPerClockTick": 7,
+  "Prefs_SimStepsPerClockTick": 3,
   "AllCustomChipNames":[
     "AND",
     "OR",
@@ -22,15 +22,13 @@
     "SDFF",
     "CTR",
     "MUX",
-    "FADDR",
+    "FA",
     "ALU",
-    "1PC",
-    "8PC",
-    "8CREG",
     "8REG",
+    "8REG2",
     "CPU",
     "8MUX",
-    "OPDEC",
+    "CTRUNT",
     "4AND",
     "4OR",
     "8Z",
@@ -42,7 +40,7 @@
     "8RAM256",
     "HA",
     "ADD1",
-    "8PC2",
+    "PRGCTR",
     "8AND"
   ],
   "StarredList":[
@@ -99,7 +97,7 @@
       "IsCollection":false
     },
     {
-      "Name":"FADDR",
+      "Name":"FA",
       "IsCollection":false
     },
     {
@@ -107,19 +105,11 @@
       "IsCollection":false
     },
     {
-      "Name":"1PC",
-      "IsCollection":false
-    },
-    {
-      "Name":"8PC",
-      "IsCollection":false
-    },
-    {
-      "Name":"8CREG",
-      "IsCollection":false
-    },
-    {
       "Name":"8REG",
+      "IsCollection":false
+    },
+    {
+      "Name":"8REG2",
       "IsCollection":false
     },
     {
@@ -131,7 +121,7 @@
       "IsCollection":false
     },
     {
-      "Name":"OPDEC",
+      "Name":"CTRUNT",
       "IsCollection":false
     },
     {
@@ -179,7 +169,7 @@
       "IsCollection":false
     },
     {
-      "Name":"8PC2",
+      "Name":"PRGCTR",
       "IsCollection":false
     },
     {
@@ -219,7 +209,7 @@
       "Name":"MEMORY"
     },
     {
-      "Chips":["BUZZER","AND","OR","N","XOR","DL","DFF","SDFF","CTR","MUX","FADDR","ALU","1PC","8PC","8CREG","8REG","CPU","8MUX","OPDEC","4AND","4OR","8Z","8RAM","RAM16","1MEM","DEC 2-4","RAM256","8RAM256","HA","ADD1","8PC2","8AND"],
+      "Chips":["BUZZER","AND","OR","N","XOR","DL","DFF","SDFF","CTR","MUX","FA","ALU","8REG","8REG2","CPU","8MUX","CTRUNT","4AND","4OR","8Z","8RAM","RAM16","1MEM","DEC 2-4","RAM256","8RAM256","HA","ADD1","PRGCTR","8AND"],
       "IsToggledOpen":false,
       "Name":"OTHER"
     }
