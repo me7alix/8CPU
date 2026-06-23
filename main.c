@@ -2,15 +2,17 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
 
 typedef struct {
-	uint8_t A, B, PCTR;
-	uint8_t NEQ;
+	uint8_t A, B, PR;
+	uint8_t PCTR, NEQ;
 	uint8_t PROG[512];
 	uint8_t RAM[256];
 	uint8_t VRAM[256];
+	uint8_t BRAM[256];
 } CPU;
 
 void exec1(CPU *cpu) {
@@ -18,26 +20,14 @@ void exec1(CPU *cpu) {
 	uint8_t opc = cpu->PROG[idx];
 	uint8_t opr = cpu->PROG[idx+1];
 	switch (opc) {
-	case 1:
-		cpu->A += cpu->B;
-		break;
-	case 6:
-		cpu->A = opr;
-		break;
-	case 9:
-		printf("%u\n", (unsigned)cpu->A);
-		break;
-	case 10:
-		cpu->B = opr;
-		break;
-	case 11:
-		cpu->B = cpu->A;
-		break;
-	case 12:
-		cpu->VRAM[cpu->A] = opr;
-		break;
+	case 1:  cpu->A += cpu->B;        break;
+	case 6:  cpu->A = opr;            break;
+	case 9:  cpu->PR = cpu->A;        break;
+	case 10: cpu->B = opr;            break;
+	case 11: cpu->B = cpu->A;         break;
+	case 12: cpu->BRAM[cpu->A] = opr; break;
 	case 14:
-		memset(cpu->VRAM, 0, sizeof(cpu->VRAM));
+		memset(cpu->BRAM, 0, sizeof(cpu->BRAM));
 		break;
 	case 7:
 		if (opr != 255) {
@@ -71,15 +61,7 @@ void exec1(CPU *cpu) {
 			return;
 		} else break;
 	case 13:
-		printf("\033[2J\033[H");
-		for (size_t i = 0; i < 16; i++) {
-			for (size_t j = 0; j < 16; j++) {
-				if (cpu->VRAM[(15 - i) * 16 + j] == 0) printf(".");
-				else printf("@");
-			}
-			printf("\n");
-		}
-		break;
+		memcpy(cpu->VRAM, cpu->BRAM, sizeof(cpu->VRAM));
 	}
 	cpu->PCTR++;
 }
@@ -226,6 +208,32 @@ void generate(char *code, size_t count, FILE *f) {
 	}
 }
 
+void draw_state(CPU *cpu) {
+	char buf[4096];
+	FILE *fp = fmemopen(buf, sizeof(buf), "w");
+	fprintf(fp, "%-32s    %s\n", "VRAM", "RAM");
+	for (size_t i = 0; i < 16; i++) {
+		for (size_t j = 0; j < 16; j++) {
+			if (cpu->VRAM[(15 - i) * 16 + j] == 0) fprintf(fp, ". ");
+			else fprintf(fp, "██");
+		}
+		fprintf(fp, "    ");
+		for (size_t j = 0; j < 16; j++) {
+			uint8_t v = cpu->RAM[i * 16 + j];
+			fprintf(fp, "%02X ", v);
+		}
+		fprintf(fp, "\n");
+	}
+	fprintf(fp, "\nREGS\n");
+	fprintf(fp, "ACCUM = %u\n", cpu->A);
+	fprintf(fp, "BREG  = %u\n", cpu->B);
+	fprintf(fp, "PCTR  = %u\n", cpu->PCTR);
+	fprintf(fp, "PRNT  = %u\n", cpu->PR);
+	printf("\033[2J\033[H");
+	printf("%s", buf);
+	fclose(fp);
+}
+
 int main(int argc, char *argv[]) {
 	if (argc < 2) {
 		fprintf(stderr, "Usage: comp/sim ...\n");
@@ -245,11 +253,13 @@ int main(int argc, char *argv[]) {
 			return 1;
 		}
 		CPU cpu;
-		memset(cpu.RAM, 0, sizeof(cpu.RAM));
 		memcpy(cpu.PROG, code, sizeof(cpu.PROG));
+		int slp = atoi(argv[3]);
 		while (cpu.PROG[(int)cpu.PCTR*2] != 0) {
 			exec1(&cpu);
-			usleep(atoi(argv[3]));
+			draw_state(&cpu);
+			if (slp != -1) usleep(slp);
+			else getchar();
 		}
 	} else {
 		fprintf(stderr, "Usage: comp/sim ...\n");
