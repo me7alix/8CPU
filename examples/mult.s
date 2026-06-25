@@ -9,7 +9,7 @@ sta 2
 
 loop:
 	lda 1
-	movb
+	mvab
 	lda 2
 	add
 	sta 2
@@ -22,4 +22,4 @@ loop:
 	jnz loop
 
 lda 2
-prnta
+pra

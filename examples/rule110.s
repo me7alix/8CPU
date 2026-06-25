@@ -8,7 +8,7 @@ imma 31
 sta 40
 lf:
 	lda 40
-	movb
+	mvab
 	imma 0
 	stai
 	lda 40
@@ -29,13 +29,13 @@ lm:
 
 	ld:
 		lda 40
-		movb
+		mvab
 		ldai
 		; if [CNT] == 0
 		jnz ifz
 		; draw black
 		lda 40
-		movb
+		mvab
 		lda 45
 		add ; CNT + ROWS
 		scst 0
@@ -43,7 +43,7 @@ lm:
 	ifz:
 		; draw white
 		lda 40
-		movb
+		mvab
 		lda 45
 		add ; CNT + ROWS
 		scst 1
@@ -66,11 +66,11 @@ lm:
 		lda 40
 		immb 1
 		sub
-		movb
+		mvab
 		ldai
 		immb 1
 		sub
-		jne sk1
+		jnz sk1
 		lda 41
 		immb 4
 		add
@@ -81,11 +81,11 @@ lm:
 		lda 40
 		immb 1
 		add
-		movb
+		mvab
 		ldai
 		immb 1
 		sub
-		jne sk2
+		jnz sk2
 		lda 41
 		immb 1
 		add
@@ -94,11 +94,11 @@ lm:
 
 		; [0, X, 0]
 		lda 40
-		movb
+		mvab
 		ldai
 		immb 1
 		sub
-		jne sk3
+		jnz sk3
 		lda 41
 		immb 2
 		add
@@ -112,7 +112,7 @@ lm:
 		lda 41
 		immb 7
 		sub
-		jne r1
+		jnz r1
 		imma 0
 		sta 42
 	r1:
@@ -121,7 +121,7 @@ lm:
 		lda 41
 		immb 6
 		sub
-		jne r2
+		jnz r2
 		imma 1
 		sta 42
 	r2:
@@ -130,7 +130,7 @@ lm:
 		lda 41
 		immb 5
 		sub
-		jne r3
+		jnz r3
 		imma 1
 		sta 42
 	r3:
@@ -139,7 +139,7 @@ lm:
 		lda 41
 		immb 4
 		sub
-		jne r4
+		jnz r4
 		imma 0
 		sta 42
 	r4:
@@ -148,7 +148,7 @@ lm:
 		lda 41
 		immb 3
 		sub
-		jne r5
+		jnz r5
 		imma 1
 		sta 42
 	r5:
@@ -157,7 +157,7 @@ lm:
 		lda 41
 		immb 2
 		sub
-		jne r6
+		jnz r6
 		imma 1
 		sta 42
 	r6:
@@ -166,7 +166,7 @@ lm:
 		lda 41
 		immb 1
 		sub
-		jne r7
+		jnz r7
 		imma 1
 		sta 42
 	r7:
@@ -182,7 +182,7 @@ lm:
 		lda 40
 		immb 16
 		add
-		movb
+		mvab
 		lda 42
 		stai
 
@@ -192,11 +192,11 @@ lm:
 			add
 		sta 40
 
-		; if CNT == 15: jne lt
+		; if CNT == 15: jnz lt
 		lda 40
 		immb 15
 		sub
-		jne lt
+		jnz lt
 
 	imma 32
 	sta 40 ; CNT
@@ -210,7 +210,7 @@ lm:
 
 		; [41] = [CNT]
 		lda 40
-		movb
+		mvab
 		ldai
 		sta 41
 
@@ -218,7 +218,7 @@ lm:
 		lda 40
 		immb 16
 		sub
-		movb
+		mvab
 		lda 41
 		stai
 
@@ -226,7 +226,7 @@ lm:
 		lda 40
 		immb 16
 		sub
-		jne lcp
+		jnz lcp
 
 	; ROWS += 16
 	lda 45

@@ -1,18 +1,18 @@
 imma 1
 sta 0
-prnta
+pra
 
 imma 2
 sta 1
 
 loop:
 	lda 0
-	prnta
+	pra
 
 	lda 1
 	sta 2
 
-	movb
+	mvab
 	lda 0
 	add
 	sta 1

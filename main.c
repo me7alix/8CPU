@@ -7,63 +7,43 @@
 #include <unistd.h>
 
 typedef struct {
-	uint8_t A, B, PR;
-	uint8_t PCTR, NEQ;
+	uint8_t A, B;
+	uint8_t PR, PC;
 	uint8_t PROG[512];
 	uint8_t RAM[256];
+	uint8_t SCRN[256];
 	uint8_t VRAM[256];
-	uint8_t BRAM[256];
 } CPU;
 
 void exec1(CPU *cpu) {
-	int idx = (int)cpu->PCTR * 2;
+	int idx = (int)cpu->PC * 2;
 	uint8_t opc = cpu->PROG[idx];
 	uint8_t opr = cpu->PROG[idx+1];
 	switch (opc) {
-	case 1:  cpu->A += cpu->B;        break;
-	case 6:  cpu->A = opr;            break;
-	case 9:  cpu->PR = cpu->A;        break;
-	case 10: cpu->B = opr;            break;
-	case 11: cpu->B = cpu->A;         break;
-	case 12: cpu->BRAM[cpu->A] = opr; break;
-	case 14:
-		memset(cpu->BRAM, 0, sizeof(cpu->BRAM));
-		break;
-	case 7:
-		if (opr != 255) {
-			cpu->A = cpu->RAM[opr];
-		} else {
-			cpu->A = cpu->RAM[cpu->B];
-		}
-		break;
-	case 8:
-		if (opr != 255) {
-			cpu->RAM[opr] = cpu->A;
-		} else {
-			cpu->RAM[cpu->B] = cpu->A;
-		}
-		break;
-	case 2:
-		cpu->NEQ = cpu->A != cpu->B;
-		cpu->A -= cpu->B;
-		break;
-	case 3:
-		cpu->PCTR = opr;
-		return;
+	case 1:  cpu->A += cpu->B;          break;
+	case 2:  cpu->A -= cpu->B;          break;
+	case 3:  cpu->PC = opr;             return;
+	case 6:  cpu->A = opr;              break;
+	case 9:  cpu->PR = cpu->A;          break;
+	case 10: cpu->B = opr;              break;
+	case 11: cpu->B = cpu->A;           break;
+	case 12: cpu->VRAM[cpu->A] = opr;   break;
+	case 5:  cpu->A = cpu->RAM[cpu->B]; break;
+	case 15: cpu->RAM[cpu->B] = cpu->A; break;
+	case 7:  cpu->A = cpu->RAM[opr];    break;
+	case 8:  cpu->RAM[opr] = cpu->A;    break;
 	case 4:
 		if (cpu->A != 0) {
-			cpu->PCTR = opr;
-			return;
-		} else break;
-	case 5:
-		if (cpu->NEQ) {
-			cpu->PCTR = opr;
+			cpu->PC = opr;
 			return;
 		} else break;
 	case 13:
-		memcpy(cpu->VRAM, cpu->BRAM, sizeof(cpu->VRAM));
+		memcpy(cpu->SCRN, cpu->VRAM, sizeof(cpu->SCRN));
+		break;
+	case 14:
+		memset(cpu->VRAM, 0, sizeof(cpu->VRAM));
 	}
-	cpu->PCTR++;
+	cpu->PC++;
 }
 
 int read_num(char *ln) {
@@ -75,11 +55,11 @@ int read_num(char *ln) {
 	return atoi(num);
 }
 
-void read_label(char *lbl, char *ln) {
-	size_t lblcnt = 0;
+void read_label(char *label, char *ln) {
+	size_t cnt = 0;
 	while (isalnum(*ln))
-		lbl[lblcnt++] = *ln++;
-	lbl[lblcnt] = '\0';
+		label[cnt++] = *ln++;
+	label[cnt] = '\0';
 }
 
 typedef struct {
@@ -107,11 +87,11 @@ size_t translate(uint8_t *code, FILE *f) {
 			code[count++] = 10;
 			code[count++] = read_num(ln);
 		} else if (strncmp(ln, "ldai", 4) == 0) {
-			code[count++] = 7;
-			code[count++] = 255;
+			code[count++] = 5;
+			code[count++] = 0;
 		} else if (strncmp(ln, "stai", 4) == 0) {
-			code[count++] = 8;
-			code[count++] = 255;
+			code[count++] = 15;
+			code[count++] = 0;
 		} else if (strncmp(ln, "scst", 4) == 0) {
 			ln += 4;
 			while (*ln == ' ') ln++;
@@ -133,7 +113,7 @@ size_t translate(uint8_t *code, FILE *f) {
 		} else if (strncmp(ln, "sub", 3) == 0) {
 			code[count++] = 2;
 			code[count++] = 0;
-		} else if (strncmp(ln, "prnta", 5) == 0) {
+		} else if (strncmp(ln, "pra", 3) == 0) {
 			code[count++] = 9;
 			code[count++] = 0;
 		} else if (strncmp(ln, "scrs", 4) == 0) {
@@ -142,26 +122,22 @@ size_t translate(uint8_t *code, FILE *f) {
 		} else if (strncmp(ln, "scrf", 4) == 0) {
 			code[count++] = 13;
 			code[count++] = 0;
-		} else if (strncmp(ln, "movb", 4) == 0) {
+		} else if (strncmp(ln, "mvab", 4) == 0) {
 			code[count++] = 11;
 			code[count++] = 0;
 		} else if (
 			strncmp(ln, "jnz", 3) == 0 ||
-			strncmp(ln, "jne", 3) == 0 ||
 			strncmp(ln, "jmp", 3) == 0
 		) {
-			int jk;
-			if (strncmp(ln, "jnz", 3) == 0) jk = 4;
-			else if (strncmp(ln, "jne", 3) == 0) jk = 5;
-			else if (strncmp(ln, "jmp", 3) == 0) jk = 3;
+			bool jnz = strncmp(ln, "jnz", 3) == 0;
+			int jk = jnz ? 4 : 3;
 			code[count++] = jk;
-			ln += 3;
-			while (*ln == ' ') ln++;
-			char lbl[32];
-			read_label(lbl, ln);
+			ln += 3; while (*ln == ' ') ln++;
+			char label[32];
+			read_label(label, ln);
 			bool found = false;
 			for (size_t i = 0; i < lcnt; i++) {
-				if (strcmp(labels[i].id, lbl) == 0) {
+				if (strcmp(labels[i].id, label) == 0) {
 					code[count++] = labels[i].pos;
 					found = true;
 					break;
@@ -169,13 +145,13 @@ size_t translate(uint8_t *code, FILE *f) {
 			}
 			if (!found) {
 				code[count++] = 0;
-				memcpy(jumps[jcnt].id, lbl, sizeof(lbl));
+				memcpy(jumps[jcnt].id, label, sizeof(label));
 				jumps[jcnt++].pos = count - 1;
 			}
 		} else if (*ln == ';' || *ln == '\n') {
 			continue;
 		} else {
-			char *svdln = ln;
+			char *savdln = ln;
 			bool found = false;
 			while (*ln != '\0') {
 				if (*ln++ == ':') {
@@ -187,13 +163,13 @@ size_t translate(uint8_t *code, FILE *f) {
 				fprintf(stderr, "line %zu: wrong instruction\n", lines);
 				return 1;
 			}
-			ln = svdln;
-			char lbl[32];
-			read_label(lbl, ln);
-			memcpy(labels[lcnt].id, lbl, sizeof(lbl));
+			ln = savdln;
+			char label[32];
+			read_label(label, ln);
+			memcpy(labels[lcnt].id, label, sizeof(label));
 			labels[lcnt++].pos = count / 2;
 			for (size_t i = 0; i < jcnt; i++) {
-				if (strcmp(jumps[i].id, lbl) == 0) {
+				if (strcmp(jumps[i].id, label) == 0) {
 					code[jumps[i].pos] = count / 2;
 				}
 			}
@@ -211,10 +187,10 @@ void generate(char *code, size_t count, FILE *f) {
 void draw_state(CPU *cpu) {
 	char buf[4096];
 	FILE *fp = fmemopen(buf, sizeof(buf), "w");
-	fprintf(fp, "%-32s    %s\n", "VRAM", "RAM");
+	fprintf(fp, "%-32s    %s\n", "SCRN", "RAM");
 	for (size_t i = 0; i < 16; i++) {
 		for (size_t j = 0; j < 16; j++) {
-			if (cpu->VRAM[(15 - i) * 16 + j] == 0) fprintf(fp, ". ");
+			if (cpu->SCRN[(15 - i) * 16 + j] == 0) fprintf(fp, ". ");
 			else fprintf(fp, "██");
 		}
 		fprintf(fp, "    ");
@@ -225,10 +201,10 @@ void draw_state(CPU *cpu) {
 		fprintf(fp, "\n");
 	}
 	fprintf(fp, "\nREGS\n");
-	fprintf(fp, "ACCUM = %u\n", cpu->A);
-	fprintf(fp, "BREG  = %u\n", cpu->B);
-	fprintf(fp, "PCTR  = %u\n", cpu->PCTR);
-	fprintf(fp, "PRNT  = %u\n", cpu->PR);
+	fprintf(fp, "A  = %u\n", cpu->A);
+	fprintf(fp, "B  = %u\n", cpu->B);
+	fprintf(fp, "PC = %u\n", cpu->PC);
+	fprintf(fp, "PR = %u\n", cpu->PR);
 	printf("\033[H");
 	printf("%s", buf);
 	fclose(fp);
@@ -256,7 +232,7 @@ int main(int argc, char *argv[]) {
 		memcpy(cpu.PROG, code, sizeof(cpu.PROG));
 		int slp = atoi(argv[3]);
 		printf("\033[2J");
-		while (cpu.PROG[(int)cpu.PCTR*2] != 0) {
+		while (cpu.PROG[(int)cpu.PC*2] != 0) {
 			exec1(&cpu);
 			draw_state(&cpu);
 			if (slp != -1) usleep(slp);

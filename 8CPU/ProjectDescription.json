@@ -3,7 +3,7 @@
   "DLSVersion_LastSaved": "2.1.6",
   "DLSVersion_EarliestCompatible": "2.0.0",
   "CreationTime": "2026-04-02T11:06:15.136+03:00",
-  "LastSaveTime": "2026-06-23T22:54:56.589+03:00",
+  "LastSaveTime": "2026-06-25T22:27:42.977+03:00",
   "Prefs_MainPinNamesDisplayMode": 2,
   "Prefs_ChipPinNamesDisplayMode": 1,
   "Prefs_GridDisplayMode": 0,
@@ -180,7 +180,7 @@
   "ChipCollections":[
     {
       "Chips":["NAND","CLOCK","PULSE","KEY","3-STATE BUFFER"],
-      "IsToggledOpen":false,
+      "IsToggledOpen":true,
       "Name":"BASIC"
     },
     {

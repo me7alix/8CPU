@@ -5,56 +5,57 @@
 An accumulator based 8 bit CPU made in <a href="https://sebastian.itch.io/digital-logic-sim">DigLogSim</a>
 
 ## Registers
- - **PCTR**: Program counter
  - **A**: Accumulator
  - **B**: General-purpose register
+ - **PC**: Program counter
 
 ## Set of instructions
  - `01` **add**:   `A = A + B`
  - `02` **sub**:   `A = A - B`
- - `03` **jmp**:   `PCTR = IMM`
+ - `03` **jmp**:   `PC = IMM`
  - `04` **jnz**:   `jmp if A != 0`
- - `05` **jne**:   `jmp if A != B`
+ - `05` **ldai**:  `A = RAM[B]`
+ - `0F` **stai**:  `RAM[B] = A`
+ - `07` **lda**:   `A = RAM[IMM]`
+ - `08` **sta**:   `RAM[IMM] = A`
  - `06` **imma**:  `A = IMM`
- - `07` **lda**:   `A = RAM[B]`
- - `08` **sta**:   `RAM[B] = A`
- - `09` **prnta**: `print A`
  - `0A` **immb**:  `B = IMM`
- - `0B` **movb**:  `B = A`
- - `0C` **scst**:  `BRAM[A] = IMM`
- - `0D` **scrf**:  `VRAM = BRAM`
- - `0E` **scrs**:  `BRAM = {0}`
+ - `0B` **mvab**:  `B = A`
+ - `09` **pra**:   `print A`
+ - `0C` **scst**:  `VRAM[A] = IMM`
+ - `0D` **scrf**:  `SCRN = VRAM`
+ - `0E` **scrs**:  `VRAM = {0}`
 
 ## Example programs
 
 Two numbers multiplication:
 
 ```asm
-imma 8 ; A
+imma 8
 sta 0
 
-imma 7 ; B
+imma 7
 sta 1
 
 imma 0
 sta 2
 
 loop:
-  lda 1
-  movb
-  lda 2
-  add
-  sta 2
+	lda 1
+	mvab
+	lda 2
+	add
+	sta 2
 
-  lda 0
-  immb 1
-  sub
-  sta 0
+	lda 0
+	immb 1
+	sub
+	sta 0
 
-  jnz loop
+	jnz loop
 
 lda 2
-prnta
+pra
 ```
 
 Fibonacci sequence:
@@ -62,25 +63,25 @@ Fibonacci sequence:
 ```asm
 imma 1
 sta 0
-prnta
+pra
 
 imma 2
 sta 1
 
 loop:
-  lda 0
-  prnta
+	lda 0
+	pra
 
-  lda 1
-  sta 2
+	lda 1
+	sta 2
 
-  movb
-  lda 0
-  add
-  sta 1
+	mvab
+	lda 0
+	add
+	sta 1
 
-  lda 2
-  sta 0
+	lda 2
+	sta 0
 
-  jmp loop
+	jmp loop
 ```
