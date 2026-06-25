@@ -1,6 +1,6 @@
 # 8CPU
 
-<img width="942" height="510" alt="image" src="https://github.com/user-attachments/assets/620ae46c-2f94-48f6-afc7-2ee7c7f0beac" />
+<img width="1025" height="545" alt="image" src="https://github.com/user-attachments/assets/9df75505-df28-443a-8554-7941707fea01" />
 
 An accumulator based 8 bit CPU made in <a href="https://sebastian.itch.io/digital-logic-sim">DigLogSim</a>
 
